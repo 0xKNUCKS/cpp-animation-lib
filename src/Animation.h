@@ -10,26 +10,6 @@ public:
     Animation(float AnimDuration) : animationDuration(AnimDuration) {};
     Animation(float AnimDuration, easing_functions In, easing_functions out) : animationDuration(AnimDuration), EaseIn(In), EaseOut(out) {};
 
-    // A helper function to get the Delta-Time, which is the time elapsed since the last frame in seconds
-    inline float GetDeltaTime()
-    {
-        // To shorten this very long class name with just "clock"
-        using clock = std::chrono::high_resolution_clock;
-
-        static clock::time_point prevTime = clock::now();
-        clock::time_point currentTime = clock::now();
-
-        // Calculate the duration between the previous time and the current time
-        std::chrono::duration<float> duration = currentTime - prevTime;
-
-        // Convert the duration to seconds and update the previous time
-        float deltaTime = duration.count();
-        prevTime = currentTime;
-
-        // Done! just return the value now
-        return deltaTime;
-    }
-
     // Update the animations
     inline void Update()
     {
@@ -80,5 +60,25 @@ private:
     // Ease in and out functions Declaration
     easing_functions EaseIn = EaseInQuad;
     easing_functions EaseOut = EaseOutQuad;
+
+    // A helper function to get the Delta-Time, which is the time elapsed since the last frame in seconds
+    inline float GetDeltaTime()
+    {
+        // To shorten this very long class name with just "clock"
+        using clock = std::chrono::high_resolution_clock;
+
+        static clock::time_point prevTime = clock::now();
+        clock::time_point currentTime = clock::now();
+
+        // Calculate the duration between the previous time and the current time
+        std::chrono::duration<float> duration = currentTime - prevTime;
+
+        // Convert the duration to seconds and update the previous time
+        float deltaTime = duration.count();
+        prevTime = currentTime;
+
+        // Done! just return the value now
+        return deltaTime;
+    }
 };
 
