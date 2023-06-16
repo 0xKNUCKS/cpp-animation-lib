@@ -34,13 +34,13 @@ float AlphaValue = anmFade.getValue(0.65f); // This will just multiply the value
 Thats it for getting the value of the animation and updating it!<br><br>
 but what about switching from fade-in or out, to do that we'll use the <strong>_Switch_</strong> function, or <strong>_getSwitch_</strong> based on what we're doing, and like said we'll be using [ImGui](https://github.com/ocornut/imgui) for our example here
 ```cpp
-// All of the steps that we've already done
-    static Animation anmFade(2.5f, EaseOutCirc, EaseInCirc);
+    // All of the steps that we've already done
+    static Animation anmFade(1.5f, EaseInCubic, EaseOutSine);
     anmFade.Update();
 
     float AlphaValue = anmFade.getValue(0.65f);
     ImColor col = ImVec4(0.f, 0.f, 0.f, AlphaValue);
-        ImGui::GetBackgroundDrawList()->AddRectFilled(ImVec2(0, 0), ImGui::GetIO().DisplaySize, col);
+    ImGui::GetBackgroundDrawList()->AddRectFilled(ImVec2(0, 0), ImGui::GetIO().DisplaySize, col);
     
     // How to use the switch for a button
     if (ImGui::Button("Button Switch!"))
