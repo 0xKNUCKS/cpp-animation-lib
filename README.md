@@ -56,5 +56,8 @@ you can use this for basically everything in your code that you want to animate 
 # Notes
 You can explore the easing functions and see their visual effects and behaviours [here](https://easings.net/) at [easings.net](https://easings.net/)!
 
+# Issues
+unfortunately an issue have been found where you can't do more than one Animation calss, not much more have been tested, but this will hopefully be fixed later with other suggestions from [Cazz](https://github.com/cazzwastaken)'s [Discord Server](https://discord.com/invite/xcZgJbAARc), much thanks to @Patoke for the feedback provided.
+
 # Credits
 [Easings Functions](https://github.com/nicolausYes/easing-functions) | [Nikolay](https://github.com/nicolausYes) for the C++ easing functions library!
