@@ -62,22 +62,29 @@ private:
     easing_functions EaseOut = EaseOutQuad;
 
     // A helper function to get the Delta-Time, which is the time elapsed since the last frame in seconds
-    inline float GetDeltaTime()
+    float getDeltaTime()
     {
         // To shorten this very long class name with just "clock"
         using clock = std::chrono::high_resolution_clock;
 
-        static clock::time_point prevTime = clock::now();
-        clock::time_point currentTime = clock::now();
+        static unsigned int currTick = 0;
+        static unsigned int lastTick = currTick;
+        currTick++;
 
-        // Calculate the duration between the previous time and the current time
-        std::chrono::duration<float> duration = currentTime - prevTime;
+        clock::time_point currTime = clock::now();
+        static clock::time_point lastTickTime = clock::now();
 
-        // Convert the duration to seconds and update the previous time
-        float deltaTime = duration.count();
-        prevTime = currentTime;
+        float deltaTime;
 
-        // Done! just return the value now
+        if (lastTick != currTick)
+        {
+            std::chrono::duration<float> duration = currTime - lastTickTime;
+            deltaTime = duration.count();
+        }
+
+        lastTick = currTick;
+        lastTickTime = clock::now();
+
         return deltaTime;
     }
 };
