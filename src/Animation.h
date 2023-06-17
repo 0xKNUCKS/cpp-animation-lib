@@ -11,7 +11,7 @@ public:
     Animation(float AnimDuration, easing_functions In, easing_functions out) : animationDuration(AnimDuration), EaseIn(In), EaseOut(out) {};
 
     // Update the animations
-    inline void Update()
+    void Update()
     {
         // Reset the elapsed time if the bool switches
         static bool lastSwitch = bSwitch;
