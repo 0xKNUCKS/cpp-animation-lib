@@ -58,6 +58,6 @@ You can explore the easing functions and see their visual effects and behaviours
 
 # Issues
 unfortunately an issue have been found where you can't do more than one Animation calss, not much more have been tested, but this will hopefully be fixed later with other suggestions from [Cazz](https://github.com/cazzwastaken)'s [Discord Server](https://discord.com/invite/xcZgJbAARc), much thanks to @Patoke for the feedback provided.
-
+- at this current time i won't be able to test this further more or try to fix it or update and that's because i wont have access to my computer or any computer for the next week due to me being in a vacation, so for now this project is open for any contribution from anyone.
 # Credits
 [Easings Functions](https://github.com/nicolausYes/easing-functions) | [Nikolay](https://github.com/nicolausYes) for the C++ easing functions library!
