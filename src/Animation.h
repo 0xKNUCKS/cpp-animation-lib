@@ -6,86 +6,81 @@
 class Animation
 {
 public:
-    Animation() : animationDuration(1.0f), EaseIn(EaseInQuad), EaseOut(EaseOutQuad) {};
-    Animation(float AnimDuration) : animationDuration(AnimDuration) {};
-    Animation(float AnimDuration, easing_functions In, easing_functions out) : animationDuration(AnimDuration), EaseIn(In), EaseOut(out) {};
+    Animation() : m_flAnimationDuration(1.0f), m_eEaseIn(EaseInQuad), m_eEaseOut(EaseOutQuad) {};
+    Animation(float AnimDuration) : m_flAnimationDuration(AnimDuration) {};
+    Animation(float AnimDuration, easing_functions In, easing_functions out) : m_flAnimationDuration(AnimDuration), m_eEaseIn(In), m_eEaseOut(out) {};
 
-    // Update the animations
+    // Has to be called every tick
     void Update()
     {
         // Reset the elapsed time if the bool switches
-        static bool lastSwitch = bSwitch;
-        if (bSwitch != lastSwitch)
-            elapsedTime = 0;
+        if (m_bSwitch != m_bLastSwitch)
+            m_flElapsedTime = 0;
 
-        // Calculate the progress of the animation based on elapsed time
-        elapsedTime = max(0.0f, min(elapsedTime, animationDuration));
-        float t = elapsedTime / animationDuration;
+        m_flElapsedTime = max(0.0f, min(m_flElapsedTime, m_flAnimationDuration));
+        float t = m_flElapsedTime / m_flAnimationDuration;
 
-        // Determine the initial value based on the current state
-        float initialValue = bSwitch ? 0.0f : Value;
-
-        // Determine the target value based on the current state (1.0f is max value)
-        float targetValue = bSwitch ? 1.0f : 0.0f;
+        // Determine the initial and target value based on the current state
+        float initialValue = m_bSwitch ? 0.0f : m_flValue;
+        float targetValue = m_bSwitch ? 1.0f : 0.0f; /*(1.0f is max value)*/
 
         // Select the appropriate easing function based on the current state
-        easing_functions EaseInOrOut = bSwitch ? EaseIn : EaseOut;
+        easing_functions EaseInOrOut = m_bSwitch ? m_eEaseIn : m_eEaseOut;
 
         // Apply the appropriate easing function based on fade-in or fade-out (with lerping, which is basically what's the math were doing)
-        Value = initialValue + (targetValue - initialValue) * getEasingFunction(EaseInOrOut)(t);
+        m_flValue = initialValue + (targetValue - initialValue) * getEasingFunction(EaseInOrOut)(t);
 
-        // Increment the elapsed time
-        elapsedTime += GetDeltaTime();
-        lastSwitch = bSwitch; // Update last switch's value
+        m_flElapsedTime += getDeltaTime();
+        m_bLastSwitch = m_bSwitch;
     }
 
-    float   getValue() { return Value; } // Get the current value of animation
-    float   getValue(float baseValue) { return Value * baseValue; } // Get the current value multiplied by a base value
-    int     getValue(int baseValue) { return (int)(Value * baseValue); } // Get the current value multiplied by a base value
+    float   getValue() { return m_flValue; }
+    float   getValue(float scale) { return m_flValue * scale; } // Get the current value multiplied by a scale
+    int     getValue(int baseValue) { return (int)(m_flValue * baseValue); } // Get the current value multiplied by a scale
 
-    bool& getSwitch() { return bSwitch; }
-    bool Switch() { return bSwitch = !bSwitch; } // Switch between easeIn or Out ( Switch(bool value) to set it to a wanted value )
-    void Switch(bool value) { bSwitch = value; } // Set the switch bool to a value
-private:
+    bool& getSwitch() { return m_bSwitch; }
+    bool Switch() { return m_bSwitch = !m_bSwitch; } // Switch between easeIn or Out
+    void Switch(bool value) { m_bSwitch = value; } // Set the switch bool to a value
+protected:
     // Set to true for ease-in animation, false for ease-out
-    bool bSwitch = false;
+    bool m_bSwitch = 0;
+    bool m_bLastSwitch = m_bSwitch;
 
     // Duration of the animation in seconds
-    float animationDuration = 1.0f;
-    float elapsedTime = 0.f;
+    float m_flAnimationDuration = 1.0f;
+    float m_flElapsedTime = 0.f;
 
     // Current value of the animation
-    float Value = 0.f;
+    float m_flValue = 0.f;
 
     // Ease in and out functions Declaration
-    easing_functions EaseIn = EaseInQuad;
-    easing_functions EaseOut = EaseOutQuad;
+    easing_functions m_eEaseIn = EaseInQuad;
+    easing_functions m_eEaseOut = EaseOutQuad;
 
-    // A helper function to get the Delta-Time, which is the time elapsed since the last frame in seconds
+    // To shorten this very long class name with just "clock"
+    using clock = std::chrono::high_resolution_clock;
+
+    // Variables related to the deltaTime function
+    unsigned int m_iCurrTick = 0;
+    unsigned int m_iLastTick = m_iCurrTick;
+    clock::time_point m_tCurrTime = clock::now();
+    clock::time_point m_tLastTickTime = clock::now();
+
     float getDeltaTime()
     {
-        // To shorten this very long class name with just "clock"
-        using clock = std::chrono::high_resolution_clock;
+        m_iCurrTick++;
+        m_tCurrTime = clock::now();
 
-        static unsigned int currTick = 0;
-        static unsigned int lastTick = currTick;
-        currTick++;
-
-        clock::time_point currTime = clock::now();
-        static clock::time_point lastTickTime = clock::now();
-
-        float deltaTime;
-
-        if (lastTick != currTick)
+        float deltaTime = 0;
+        if (m_iLastTick != m_iCurrTick)
         {
-            std::chrono::duration<float> duration = currTime - lastTickTime;
+            std::chrono::duration<float> duration = m_tCurrTime - m_tLastTickTime;
             deltaTime = duration.count();
         }
 
-        lastTick = currTick;
-        lastTickTime = clock::now();
+        m_iLastTick = m_iCurrTick;
+        m_tLastTickTime = clock::now();
 
         return deltaTime;
     }
 };
-
