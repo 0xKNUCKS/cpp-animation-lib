@@ -51,8 +51,9 @@ ImGui::Checkbox("Button Switch!", &anmFade.getSwitch());
 ```
 Voilà!<br>
 the code above will result in a working fade-in and out back-ground easily!<br>
-you can use this for basically everything in your code that you want to animate or transition any value smoothly really<br><br>
-Another great example is creating a _pop-up window_! To demonstrate this, I will also be using [ImGui](https://github.com/ocornut/imgui). Although all the steps are the same, I will also provide the Class Properties and the necessary math calculations specifically for the proof of concept. This will allow you to try it out, understand the code better, and become more familiar with using the library.
+you can use this for basically everything in your code that you want to animate or transition any value smoothly really
+***
+Another great example is creating a <strong>_pop-up window_</strong>! To demonstrate this, I will also be using [ImGui](https://github.com/ocornut/imgui). Although all the steps are the same, I will also provide the Class Properties and the necessary math calculations specifically for the proof of concept. This will allow you to try it out, understand the code better, and become more familiar with using the library.
 
 ```cpp
 // the Properties for a proper pop-up animation 
