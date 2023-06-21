@@ -49,9 +49,32 @@ if (ImGui::Button("Button Switch!"))
 // Or for checkboxes, were gonna have to use the "getSwtich" function
 ImGui::Checkbox("Button Switch!", &anmFade.getSwitch());
 ```
-Violla!<br>
+Voilà!<br>
 the code above will result in a working fade-in and out back-ground easily!<br>
-you can use this for basically everything in your code that you want to animate or transition any value smoothly really
+you can use this for basically everything in your code that you want to animate or transition any value smoothly really<br><br>
+Another great example is creating a _pop-up window_! To demonstrate this, I will also be using [ImGui](https://github.com/ocornut/imgui). Although all the steps are the same, I will also provide the Class Properties and the necessary math calculations specifically for the proof of concept. This will allow you to try it out, understand the code better, and become more familiar with using the library.
+
+```cpp
+// the Properties for a proper pop-up animation 
+Animation anim(0.5f, EaseOutBack, EaseOutSine);
+
+// the math calculations for the size, and position
+int width = 400, height = 200;
+auto Size = ImVec2(anim.getValue(width), anim.getValue(height));
+auto Pos = ImVec2((ImGui::GetIO().DisplaySize - Size) / 2);
+
+// This is only because ImGui limits window sizes, and wont go to 0
+if (anim.getValue() > 0.1f)
+{
+    ImGui::SetNextWindowPos(Pos);
+    ImGui::SetNextWindowSize(Size);
+    ImGui::Begin("Popup Window");
+    ImGui::End();
+}
+```
+Try this out for yourself and see the results!
+you can play around with this as much as you want and just go crazy wit hit.<br>
+<strong>Have fun!</strong>
 
 # Notes
 You can explore the easing functions and see their visual effects and behaviours [here](https://easings.net/) at [easings.net](https://easings.net/)!
