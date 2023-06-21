@@ -74,7 +74,7 @@ if (anim.getValue() > 0.1f)
 }
 ```
 Try this out for yourself and see the results!
-you can play around with this as much as you want and just go crazy wit hit.<br>
+you can play around with this as much as you want and just go crazy with it.<br>
 <strong>Have fun!</strong>
 
 # Notes
