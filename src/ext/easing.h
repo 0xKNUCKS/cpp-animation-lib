@@ -219,6 +219,10 @@ double easeInOutBounce(double t) {
     }
 }
 
+double linear(double t) {
+    return t;
+}
+
 easingFunction getEasingFunction(easing_functions function)
 {
     static std::map< easing_functions, easingFunction > easingFunctions;
@@ -254,7 +258,7 @@ easingFunction getEasingFunction(easing_functions function)
         easingFunctions.insert(std::make_pair(EaseInBounce, easeInBounce));
         easingFunctions.insert(std::make_pair(EaseOutBounce, easeOutBounce));
         easingFunctions.insert(std::make_pair(EaseInOutBounce, easeInOutBounce));
-
+        easingFunctions.insert(std::make_pair(Linear, linear));
     }
 
     auto it = easingFunctions.find(function);
