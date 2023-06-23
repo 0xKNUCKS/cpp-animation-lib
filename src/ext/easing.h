@@ -3,8 +3,6 @@
 #include <cmath>
 #include <map>
 
-#include "easing.h"
-
 #ifndef PI
 #define PI 3.1415926545
 #endif
@@ -40,7 +38,8 @@ enum easing_functions
 	EaseInOutElastic,
 	EaseInBounce,
 	EaseOutBounce,
-	EaseInOutBounce
+	EaseInOutBounce,
+    Linear
 };
 
 typedef double(*easingFunction)(double);
