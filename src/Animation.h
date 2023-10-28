@@ -3,12 +3,19 @@
 #include <chrono>
 #include "ext/easing.h"
 
+// Bit-flags to define specific modes for animating
+enum AnimationFlags : uint16_t
+{
+    INVERSE = 1, // Inverses the results, e.g. 0 will have the result of 1, etc. (1-t)
+    STATIC, // Used for just a static function usage, meaning no need for switching between two functions with lerping etc. elemenating the implemention of LERPING
+};
+
 class Animation
 {
 public:
     Animation() : m_flAnimationDuration(1.0f), m_eEaseIn(EaseInQuad), m_eEaseOut(EaseOutQuad) {};
-    Animation(float AnimDuration) : m_flAnimationDuration(AnimDuration) {};
-    Animation(float AnimDuration, easing_functions In, easing_functions out) : m_flAnimationDuration(AnimDuration), m_eEaseIn(In), m_eEaseOut(out) {};
+    Animation(float AnimDuration, AnimationFlags flags = (AnimationFlags)0) : m_flAnimationDuration(AnimDuration), m_iFlags(flags) {};
+    Animation(float AnimDuration, easing_functions In, easing_functions out, AnimationFlags flags = (AnimationFlags)0) : m_flAnimationDuration(AnimDuration), m_eEaseIn(In), m_eEaseOut(out), m_iFlags(flags) {};
 
     // Has to be called every tick
     void Update()
@@ -20,15 +27,25 @@ public:
         m_flElapsedTime = max(0.0f, min(m_flElapsedTime, m_flAnimationDuration));
         float t = m_flElapsedTime / m_flAnimationDuration;
 
-        // Determine the initial and target value based on the current state
-        float initialValue = m_bSwitch ? 0.0f : m_flValue;
-        float targetValue = m_bSwitch ? 1.0f : 0.0f; /*(1.0f is max value)*/
-
         // Select the appropriate easing function based on the current state
         easing_functions EaseInOrOut = m_bSwitch ? m_eEaseIn : m_eEaseOut;
 
-        // Apply the appropriate easing function based on fade-in or fade-out (with lerping, which is basically what's the math were doing)
-        m_flValue = initialValue + (targetValue - initialValue) * getEasingFunction(EaseInOrOut)(t);
+        // Get the current function's value
+        float functionValue = getEasingFunction(EaseInOrOut)((m_iFlags & AnimationFlags::INVERSE) ? 1.f - t : t);
+
+        if (!(m_iFlags & AnimationFlags::STATIC))
+        {
+            // Determine the initial and target value based on the current state
+            float initialValue = m_bSwitch ? 0.0f : m_flValue;
+            float targetValue = m_bSwitch ? 1.0f : 0.0f; /*(1.0f is max value)*/
+
+            // Apply the appropriate easing function based on fade-in or fade-out (with lerping, which is basically what's the math were doing)
+            m_flValue = initialValue + (targetValue - initialValue) * functionValue;
+        }
+        else {
+            // Just the pure function value
+            m_flValue = functionValue;
+        }
 
         m_flElapsedTime += getDeltaTime();
         m_bLastSwitch = m_bSwitch;
@@ -42,6 +59,9 @@ public:
     bool Switch() { return m_bSwitch = !m_bSwitch; } // Switch between easeIn or Out
     void Switch(bool value) { m_bSwitch = value; } // Set the switch bool to a value
 protected:
+    // To store defined bit-flags from the 'AnimationFlags' flags
+    uint16_t m_iFlags = 0;
+
     // Set to true for ease-in animation, false for ease-out
     bool m_bSwitch = 0;
     bool m_bLastSwitch = m_bSwitch;
