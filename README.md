@@ -33,7 +33,7 @@ Animation  animFade(2.5f, EaseInCirc, EaseOutCirc);
 
 ```
 
-Inserting into the `AnimationManager`:
+Now to link it to our Manager use the `Insert` function:
 
 ```cpp
 
@@ -47,7 +47,7 @@ animManager.Insert("FADE", new Animation(...));
 
 ```
 
-Then now, we have to constantly update it by calling the <strong>_Update_</strong> function inside your main loop
+Then now, we have to constantly update it by calling the `Update` function inside your main loop
 
 ```cpp
 
@@ -55,7 +55,7 @@ animManager.Update();
 
 ```
 
-now, get a hold of your animation object to access it and play with it, like so:
+now, get a hold of your animation object using `Inquire` to access it and play with it, like so:
 
 ```cpp
 
@@ -63,7 +63,7 @@ Animation* managerFade = animManager.Inquire("FADE");
 
 ```
 
-after that, get a hold of your animation object to access it and play with it using <strong>_Inquire_</strong>, then use the function <strong>_getValue_</strong> to retrieve your animation value.
+now, after getting our object using <strong>_Inquire_</strong>, use the function `getValue` to retrieve your on-going animation value.
 
 ```cpp
 
@@ -76,9 +76,9 @@ float  AlphaValue = managerFade->getValue(0.65f); // This will just multiply the
 
 ```
 
-Thats it for getting the value of the animation and updating it!<br><br>
+Thats about it for getting the value of the animation and updating it!<br><br>
 
-but what about switching from fade-in or out, to do that we'll use the <strong>_Switch_</strong> function, or <strong>_getSwitch_</strong> based on what we're doing, and like said we'll be using [ImGui](https://github.com/ocornut/imgui) for our example here
+but what about switching from fade-in or out, to do that we'll use the `Switch` function, or `getSwitch` based on what we're doing, and like said we'll be using [ImGui](https://github.com/ocornut/imgui) for our example here
 
 ```cpp
 
@@ -106,6 +106,14 @@ Animation* managerFade = animManager.Inquire("FADE");
 
 float AlphaValue = managerFade->getValue(0.65f);
 ImColor color = ImVec4(0.f, 0.f, 0.f, AlphaValue);
+
+ImGui::Begin("Fade testing!");
+
+if (ImGui::Button("Click me!")) {
+ managerFade->Switch();
+}
+
+ImGui::End();
 
 ImGui::GetBackgroundDrawList()->AddRectFilled(ImVec2(0, 0), ImGui::GetIO().DisplaySize, col);
 
